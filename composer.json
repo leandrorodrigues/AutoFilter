@@ -1,5 +1,5 @@
 {
-    "name": "leandrorodrigues/AutoFilter",
+    "name": "leandrorodrigues/auto-filter",
     "description": "AutoFilter plugin for CakePHP",
     "type": "cakephp-plugin",
     "require": {
@@ -11,12 +11,12 @@
     },
     "autoload": {
         "psr-4": {
-            "AutoFilter\\": "src"
+            "auto-filter\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "AutoFilter\\Test\\": "tests",
+            "auto-filter\\Test\\": "tests",
             "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
         }
     }

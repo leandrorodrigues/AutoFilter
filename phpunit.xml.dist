@@ -13,7 +13,7 @@
 
     <!-- Add any additional test suites you want to run here -->
     <testsuites>
-        <testsuite name="AutoFilter Test Suite">
+        <testsuite name="auto-filter Test Suite">
             <directory>./tests/TestCase</directory>
         </testsuite>
     </testsuites>
