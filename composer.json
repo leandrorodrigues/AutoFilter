@@ -6,17 +6,20 @@
         "php": ">=5.4.16",
         "cakephp/cakephp": "~3.0"
     },
+    "extra": {
+        "installer-name": "AutoFilter"
+    },
     "require-dev": {
         "phpunit/phpunit": "*"
     },
     "autoload": {
         "psr-4": {
-            "auto-filter\\": "src"
+            "AutoFilter\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "auto-filter\\Test\\": "tests",
+            "AutoFilter\\Test\\": "tests",
             "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
         }
     }
