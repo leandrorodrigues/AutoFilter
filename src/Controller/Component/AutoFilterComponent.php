@@ -136,7 +136,7 @@ class AutoFilterComponent extends Component {
 		if(empty($where)) {
 			return false;
 		}
-		
+
 		return $where;
 	}
 }
