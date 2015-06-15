@@ -16,7 +16,9 @@ class AutoFilterComponent extends Component {
 /**
  * @var array Opções padrão
  */
-	private $_options = array();
+	private $_options = array(
+		'queryKey' => 'q'
+	);
 
 /**
  * @var Controller Controller que fez a chamada
@@ -33,16 +35,13 @@ class AutoFilterComponent extends Component {
  *
  * @param string $term termo a ser buscado
  * @param Table &$table Table que irá pesquisar
- * @param array $settings Configurações adicionais (conditions adicionais, joins, etc)
+ * @param array $config Configurações adicionais
  * @throws MissingTableClassException
  * @return array conditions relacionados a busca
  */
-	public function generateWhere($term, Table &$table = null, $settings = array()) {
+	public function generateWhere($term, Table &$table = null, $config = array()) {
 		if ($table == null) {
-			$modelClass = $this->_controller->modelClass;
-			list(, $tableName) = pluginSplit($modelClass);
-
-			$table = $this->_controller->{$tableName};
+			$table = $this->_getTable();
 		}
 		if (!is_object($table)) {
 			throw new MissingTableClassException($table);
@@ -102,6 +101,41 @@ class AutoFilterComponent extends Component {
 		}
 
 		return ['OR' => $where];
+	}
+
+	/**
+	 * @param Table|null $table
+	 * @param array $settings
+	 *
+	 * @return \Cake\ORM\Query Query com as condições para o filtro
+	 */
+	public function generateQuery(Table &$table = null, $config = array()) {
+		if ($table == null) {
+			$table = $this->_getTable();
+		}
+		if (!is_object($table)) {
+			throw new MissingTableClassException($table);
+		}
+
+		$this->_options += $config;
+
+		$query = $table->find();
+
+		$term = $this->request->query[$this->_options['queryKey']];
+
+		if (!empty($term)) {
+			$query = $query->where($this->generateWhere($term, $table, $config));
+		}
+
+		return $query;
+	}
+
+	private function _getTable() {
+		$modelClass = $this->_controller->modelClass;
+		list(, $tableName) = pluginSplit($modelClass);
+
+		$table = $this->_controller->{$tableName};
+		return $table;
 	}
 
 	/**
