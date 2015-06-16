@@ -121,10 +121,9 @@ class AutoFilterComponent extends Component {
 
 		$query = $table->find();
 
-		$term = $this->request->query[$this->_options['queryKey']];
 
-		if (!empty($term)) {
-			$query = $query->where($this->generateWhere($term, $table, $config));
+		if (!empty($this->request->query[$this->_options['queryKey']])) {
+			$query = $query->where($this->generateWhere($this->request->query[$this->_options['queryKey']], $table, $config));
 		}
 
 		return $query;
