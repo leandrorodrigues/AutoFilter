@@ -40,6 +40,7 @@ class AutoFilterComponent extends Component {
  * @return array conditions relacionados a busca
  */
 	public function generateWhere($term, Table &$table = null, $config = array()) {
+        //convenção sobre configuração
 		if ($table == null) {
 			$table = $this->_getTable();
 		}
@@ -92,8 +93,11 @@ class AutoFilterComponent extends Component {
 
 		foreach ($fields as $tableName => $tableFields) {
 			foreach ($tableFields as $fieldName) {
+                //faz o where do campo de busca, caso necessário
 				$fieldType = $table->schema()->columnType($fieldName);
 				$whereField = $this->_makeWhere($evaluatedTerm, $tableName . '.' . $fieldName, $fieldType);
+
+                //adiciona na lista de wheres
 				if($whereField) {
 					$where = array_merge($whereField, $where);
 				}
@@ -104,6 +108,8 @@ class AutoFilterComponent extends Component {
 	}
 
 	/**
+	 * Gera um query para ser utilizado com o paginate
+	 *
 	 * @param Table|null $table
 	 * @param array $settings
 	 *
@@ -119,11 +125,17 @@ class AutoFilterComponent extends Component {
 
 		$this->_options += $config;
 
+        //query inicial
 		$query = $table->find();
 
+        //preenche o $data para que o imput venha preenchido
+        $this->request->data[$this->_options['queryKey']] = $this->request->query[$this->_options['queryKey']];
 
+        //caso tenha vindo dado na busca
 		if (!empty($this->request->query[$this->_options['queryKey']])) {
-			$query = $query->where($this->generateWhere($this->request->query[$this->_options['queryKey']], $table, $config));
+            //gera e aplica o where na query
+            $where = $this->generateWhere($this->request->query[$this->_options['queryKey']], $table, $config);
+			$query = $query->where($where);
 		}
 
 		return $query;
