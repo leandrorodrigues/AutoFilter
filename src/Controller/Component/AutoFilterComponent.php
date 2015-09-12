@@ -128,11 +128,11 @@ class AutoFilterComponent extends Component {
         //query inicial
 		$query = $table->find();
 
-        //preenche o $data para que o imput venha preenchido
-        $this->request->data[$this->_options['queryKey']] = $this->request->query[$this->_options['queryKey']];
-
         //caso tenha vindo dado na busca
 		if (!empty($this->request->query[$this->_options['queryKey']])) {
+            //preenche o $data para que o imput venha preenchido
+            $this->request->data[$this->_options['queryKey']] = $this->request->query[$this->_options['queryKey']];
+
             //gera e aplica o where na query
             $where = $this->generateWhere($this->request->query[$this->_options['queryKey']], $table, $config);
 			$query = $query->where($where);
